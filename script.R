@@ -219,26 +219,16 @@ preprocess_data <- function(x_train, x_test, etiquettes=FALSE) {
 }
 
 ## ---- preprocess
-etiquettes_in <- F
 quantit <- c("farmaco", "ordinal", "edad_integer", "counter")
 qualit <- c("raza", "binary", "nominal", "sexo")
-if(etiquettes_in) qualit <- c(qualit, "et")
-processed_datasets <- preprocess_data(x_train, x_test, etiquettes = etiquettes_in)
+# if(etiquettes_in) qualit <- c(qualit, "et")
+processed_datasets <- preprocess_data(x_train, x_test, etiquettes = FALSE)
 proc_x_train <- processed_datasets$train
 proc_x_test <- processed_datasets$test
 rm(processed_datasets)
 quanti_index <- lapply(quantit, function(x) grep(x = colnames(proc_x_train), pattern = x)) %>% unlist
 qualit_index <- lapply(qualit, function(x) grep(x = colnames(proc_x_train), pattern = x)) %>% unlist
-
-# train_set[,grep(pattern = "farmaco", x = colnames(train_set))] %>% apply(., 2, function(x) sort(unique(x)) %>% length)
-# train_set[,grep(pattern = "counter", x = colnames(train_set))] %>% apply(., 2, function(x) sort(unique(x)))
-# train_set[,grep(pattern = "ordinal", x = colnames(train_set))] %>% lapply(., function(x) table(x))
-# # test_set[,grep(pattern = "ordinal", x = colnames(test_set))] %>% lapply(., function(x) table(x))
-# train_set[,grep(pattern = "binary", x = colnames(train_set))] %>% lapply(., function(x) table(x))
-# train_set[,grep(pattern = "binary", x = colnames(train_set))] %>% apply(., 2, function(x) sort(unique(x)))
-# train_set[,grep(pattern = "nominal", x = colnames(train_set))] %>% apply(., 2, function(x) sort(unique(x)))
-
-
+processed_datasets <- preprocess_data(x_train, x_test, etiquettes = TRUE)
 
 ## ---- PCA
 res.pca <- prcomp(x = proc_x_train[, quanti_index], center = T, scale. = T)
@@ -281,8 +271,9 @@ extract_mca_data <- function(proc_data, x, cats, mca) {
 }
 
 ## ---- MCA
+ncp <- 5
 train_res.mca <- MCA(
-  X = proc_x_train, ncp = 2,
+  X = proc_x_train, ncp = ncp,
   quanti.sup = quanti_index
 )
 
@@ -292,7 +283,7 @@ proc_x_test_mca <- proc_x_test[, -unique_cols]
 
 
 test_res.mca <- MCA(
-  X = proc_x_test_mca, ncp = 2,
+  X = proc_x_test_mca, ncp = ncp,
   quanti.sup = quanti_index_2
 )
 
@@ -335,9 +326,9 @@ p
 
 ## ---- MCA_features
 train_sup_proj_data <- cbind(proc_x_train[, quanti_index],
-                             train_mca_df$obs %>% select(`Dim 1`, `Dim 2`))
+                             train_mca_df$obs %>% select(`Dim 1`:`Dim 5`))
 test_sup_proj_data <- cbind(proc_x_test[, quanti_index],
-                            test_mca_df$obs %>% select(`Dim 1`, `Dim 2`))
+                            test_mca_df$obs %>% select(`Dim 1`:`Dim 5`))
 
 ## ---- supervised_projections
 ## lda <- plotRLDF(
@@ -367,17 +358,17 @@ heatmap <- pheatmap::pheatmap(train_sup_proj_data[idx, ] %>% as.matrix,
 save(file = "heatmap.rda", heatmap)
 
 ## ---- export_data
+# Save processed datasets without one-hot encoding data but with mca features
 write.table(x = train_sup_proj_data, file = file.path(output_data, "x_train_mca.csv"),
             sep = ",", row.names = x_train$identificador, quote = F, col.names = T)
-
+write.table(x = test_sup_proj_data, file = file.path(output_data, "x_test_mca.csv"),
+            sep = ",", row.names = x_test$identificador, quote = F, col.names = T)
+# Save label to a separate file
 write.table(x = y_train, file = file.path(output_data, "y_train.csv"),
             sep = ",", row.names = x_train$identificador, quote = F, col.names = T)
 
-write.table(x = test_sup_proj_data, file = file.path(output_data, "x_test_mca.csv"),
-            sep = ",", row.names = x_test$identificador, quote = F, col.names = T)
-
-
-write.table(x = proc_x_train, file = file.path(output_data, "x_train.csv"),
+# Save processed datasets containing etiquetas too
+write.table(x = processed_datasets$train, file = file.path(output_data, "x_train.csv"),
             sep = ",", row.names = x_train$identificador, quote = F, col.names = T)
-write.table(x = proc_x_test, file = file.path(output_data, "x_test.csv"),
+write.table(x = processed_datasets$test, file = file.path(output_data, "x_test.csv"),
             sep = ",", row.names = x_test$identificador, quote = F, col.names = T)
