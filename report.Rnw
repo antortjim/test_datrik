@@ -1,0 +1,134 @@
+\documentclass{article}
+
+\usepackage[sc]{mathpazo} % cool font
+\usepackage[T1]{fontenc}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor} % fancy tables
+\usepackage{colortbl} % fancy tables
+\usepackage{float} % force float position
+\usepackage{enumitem} % itemize with letters
+\usepackage{booktabs} % fancy tables
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{1} % limit table of contents size to sections
+\usepackage{url}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false,hidelinks=true]
+ {hyperref}
+\usepackage{amsmath} % text in equations
+\hypersetup{
+ pdfstartview={XYZ null null 1}}
+\usepackage{breakurl}
+\usepackage{titling}
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}
+\makeatletter
+
+% we use \prefix@<level> only if it is defined
+\renewcommand{\@seccntformat}[1]{%
+  \ifcsname prefix@#1\endcsname
+    \csname prefix@#1\endcsname
+  \else
+    \csname the#1\endcsname\quad
+  \fi}
+% define \prefix@section
+%\newcommand\prefix@section{Part \thesection: }
+\makeatother
+
+\makeatletter
+%\newcommand\prefix@subsection{Question \thesubsection}
+\renewcommand\thesubsection{\@arabic\c@subsection}
+\makeatother
+
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily,
+  showstringspaces=false,
+  commentstyle=\color{red},
+  keywordstyle=\color{blue}
+}
+
+  
+\begin{document}
+<<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
+library(kableExtra)
+# set global chunk options
+opts_chunk$set(fig.path='figure/minimal-', fig.align='center', message = F, warning = F, fig.show='hold', fig.width=10, fig.height = 5, eval = T, echo = T, include = T, root.dir = "/home/antortjim/MEGA/Kaggle/Datrik", tidy=TRUE)
+options(formatR.arrow=TRUE, width=20, results='markup')
+
+myKable <- function(myTable, caption) {
+  kable(myTable, booktabs = T, caption = caption) %>%
+  kable_styling(latex_options = c("striped", "hold_position"))
+}
+@
+
+<<echo = F, include = F>>=
+read_chunk('script.R')
+@
+
+
+\title{Prueba técnica}
+\subtitle{Acceso a Junior Data Scientist en Datrik}
+\author{Antonio Ortega}
+
+Load libraries
+<<load_libraries, echo = T, include = F, fig.height=10>>=
+@
+
+Load data
+<<load_data, echo = T, include = F, fig.height=10>>=
+@
+
+Distribution of main categories over data
+<<plots1, echo = T, include = T, fig.height=10>>=
+@
+
+
+Define a function to preprocess the train dataset and prepare it for the machine learning algorithms
+The test set will follow a preprocessing parallel to the train
+  
+\begin{itemize}
+\item Numerical variabels stay the same (quantitative)
+\item Ordinal variables (categories with order) stay the same (quantitative)
+\item Farmacos are considered ordinals (quantitative)
+\item Nominal variables (categories with no defined order) are reformatted to one-hot (qualitiative)
+\item Binary stays the same (qualitiative)
+\item Race is reformatted to one-hot (qualitiative)
+\item Sex stays the same (only made into 1/0) (qualitiative)
+\item Etiquettes. There is room for 3 etiquetas, but it is only their presence that matters. Therefore they are passed to one-hot encoding, thus, the i,j cell will show how many times the jth etiqueta is present in the ith sample i.e. 0 to 3 times if it appears in the 3 slots. (qualitiative)
+  
+<<preprocess_function, echo = T, include = F, fig.height=10>>=
+@
+
+Preprocess datasets
+<<preprocess, echo = T, include = F, fig.height=10>>=
+@
+
+PCA
+<<PCA, echo = T, include = F, fig.height=10>>=
+@
+<<PCA_visualization, echo = T, include = T, fig.height=10>>=
+@
+
+MCA
+<<MCA_function, echo = T, include = F, fig.height=10>>=
+@
+<<MCA, echo = T, include = F, fig.height=10>>=
+@
+<<MCA_visualization, echo = T, include = F, fig.height=10>>=
+@
+<<MCA_features, echo = T, include = F, fig.height=10>>=
+@
+
+Heatmap
+<<Heatmap, echo = T, include = T, fig.height=10>>=
+@
+
+Export features
+<<export_data, echo = T, include = T, fig.height=10>>=
+@
