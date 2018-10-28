@@ -1,0 +1,402 @@
+\documentclass{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+
+\usepackage[sc]{mathpazo} % cool font
+\usepackage[T1]{fontenc}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor} % fancy tables
+\usepackage{colortbl} % fancy tables
+\usepackage{float} % force float position
+\usepackage{enumitem} % itemize with letters
+\usepackage{booktabs} % fancy tables
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{1} % limit table of contents size to sections
+\usepackage{url}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false,hidelinks=true]
+ {hyperref}
+\usepackage{amsmath} % text in equations
+\hypersetup{
+ pdfstartview={XYZ null null 1}}
+\usepackage{breakurl}
+\usepackage{titling}
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}
+\makeatletter
+
+% we use \prefix@<level> only if it is defined
+\renewcommand{\@seccntformat}[1]{%
+  \ifcsname prefix@#1\endcsname
+    \csname prefix@#1\endcsname
+  \else
+    \csname the#1\endcsname\quad
+  \fi}
+% define \prefix@section
+%\newcommand\prefix@section{Part \thesection: }
+\makeatother
+
+\makeatletter
+%\newcommand\prefix@subsection{Question \thesubsection}
+\renewcommand\thesubsection{\@arabic\c@subsection}
+\makeatother
+
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily,
+  showstringspaces=false,
+  commentstyle=\color{red},
+  keywordstyle=\color{blue}
+}
+
+\graphicspath{{plots}}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+
+
+
+
+\title{Technical test}
+\subtitle{Junior Data Scientist position at Datrik Intelligence}
+\author{Antonio Ortega}
+\maketitle
+
+\section{Introduction}
+
+The dataset provided presents a classification problem, whereby the power of several features is to be harnessed to predict a binary label (1/0). A summary of the features available is presented in table \ref{tab:summary}
+
+\begin{table}[!h]
+\centering
+\input{tables/data_summary.tex}
+\caption{46 features are provided together with an identifier variable (\textit{identificador}) and the label to be predicted \textit{Y}.}
+\label{tab:summary}
+\end{table}
+
+Y, the target variable, is to be predicted using the information stored in the remaining features by means of (I) a linear model, and (II) a gradient boosting model. But first, the data needs to be preprocessed into a format that suits these algorithms. This is carried out in the R script \texttt{EDA.R}. A guide-through of the code is provided below.
+
+\section{EDA}
+
+\subsection{Load libraries}
+
+
+\subsection{Load data}
+Read the \texttt{datos.csv} file and split the training/validation set and the test set.
+
+
+
+
+
+\subsection{Visualization of race and age}
+A general picture of how the potentially relevant categories race and age dataset are distributed across the individuals is shown in figure \ref{fig:categories}.
+
+
+  
+\begin{figure}[!h]
+\includegraphics[width=\textwidth]{plots/visualize_categories.png}
+\caption{\textbf{A} Waffle plot showing the race distribution. A majority of the individuals are defined as Caucasian, with Afro Americans making up a significant though minor proportion. The remanining individuals are Hispanic, Asian and from other groups. \textbf{B} A histogram over the age groups reveals a trend for individuals to be aged 50 and 90 years old.}
+\label{fig:categories}
+\end{figure}
+  
+The non uniform distribution of individuals over these categories and eventually many others showcases the existence of some bias in the data.
+
+\subsection{Preprocess the training and test sets}
+
+Define a function to preprocess the train dataset and prepare it for the machine learning algorithms. The test set will follow a preprocessing parallel to the train
+
+\begin{itemize}
+\item Numerical variabels stay the same (quantitative)
+\item Ordinal variables (categories with order) stay the same (quantitative)
+\item Farmacos are considered ordinals (quantitative)
+\item Nominal variables (categories with no defined order) are reformatted to one-hot (qualitiative)
+\item Binary stays the same (qualitiative)
+\item Race is reformatted to one-hot (qualitiative)
+\item Sex stays the same (only made into 1/0) (qualitiative)
+\item Etiquetas. There is room for 3 etiquetas, but it is only their presence that matters. Therefore they are passed to one-hot encoding. The i,j cell will store how many times the jth etiqueta is present in the ith sample i.e. 0 to 3 times if it appears in none or 3 slots, respectively (qualitiative)
+\end{itemize}
+
+
+   
+Apply the function
+
+
+
+  
+
+
+
+  
+  
+\subsection{\textbf{P}rincipal \textbf{C}omponent \textbf{A}nalysis (PCA)}
+
+The distribution of edad (age), raza (race), gender (sexo) and Y (label) across individuals on the 2D plane
+capturing the most variance can be visualized by means of a PCA. The PCA takes numerical features and rotates them into a new space where variance (information) is maximised on each new feature (principal component). The first two can be used to generate the mentioned 2D plane. This is shown in figure \ref{fig:pca_multicategory}
+
+
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.7\textwidth]{plots/PCA_multicategory}
+\caption{PCA plots for individuals colored by race, gender, age and label. No category seems to be distinguishable on the 2D plane in any of the features probed.}
+\label{fig:pca_multicategory}
+\end{figure}
+
+The PCA did not successfully evidence any clear pattern.
+
+\subsection{\textbf{M}ultiple \textbf{C}orrespondence \textbf{A}nalysis (MCA)}
+
+An analogous analysis can be performed using categorical variables with the MCA algorithm from the R package FactoMineR. The algorithm was run with and without etiquetas (tags) to explore if saving these ensemble of one-hot features could be spared for computational efficiency. A plot of the contribution of the explored variables to the new 2D plane is shown in figure \ref{fig:mca_variables}, whereas a plot of the individuals in this plane is shown on figure \ref{fig:mca_obs_Y}.
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{ncp} \hlkwb{<-} \hlnum{5}
+
+\hlcom{# Without etiqutas}
+\hlstd{train_sup_proj_data} \hlkwb{<-} \hlkwd{prepare_projection_data}\hlstd{(x_train,}
+    \hlstd{y_train, proc_x_train,}
+    \hlstd{quali_index, quanti_index)}
+\hlstd{unique_cols} \hlkwb{<-} \hlkwd{apply}\hlstd{(proc_x_test,}
+    \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{length}\hlstd{(}\hlkwd{unique}\hlstd{(x))} \hlopt{==}
+        \hlnum{1}\hlstd{)} \hlopt{%>%} \hlstd{which}
+\hlstd{quanti_index_mca} \hlkwb{<-} \hlkwd{lapply}\hlstd{(quanti,}
+    \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{grep}\hlstd{(}\hlkwc{x} \hlstd{=} \hlkwd{colnames}\hlstd{(proc_x_test[,}
+        \hlopt{-}\hlstd{unique_cols]),}
+        \hlkwc{pattern} \hlstd{= x))} \hlopt{%>%}
+    \hlstd{unlist}
+\hlstd{quali_index_mca} \hlkwb{<-} \hlkwd{lapply}\hlstd{(quali,}
+    \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{grep}\hlstd{(}\hlkwc{x} \hlstd{=} \hlkwd{colnames}\hlstd{(proc_x_test[,}
+        \hlopt{-}\hlstd{unique_cols]),}
+        \hlkwc{pattern} \hlstd{= x))} \hlopt{%>%}
+    \hlstd{unlist}
+\hlstd{test_sup_proj_data} \hlkwb{<-} \hlkwd{prepare_projection_data}\hlstd{(x_test,}
+    \hlkwa{NULL}\hlstd{, proc_x_test[,}
+        \hlopt{-}\hlstd{unique_cols],}
+    \hlstd{quali_index_mca,}
+    \hlstd{quanti_index_mca)}
+
+
+\hlcom{# With etiquetas}
+\hlstd{train_sup_proj_data_full} \hlkwb{<-} \hlkwd{prepare_projection_data}\hlstd{(x_train,}
+    \hlstd{y_train, processed_datasets}\hlopt{$}\hlstd{train,}
+    \hlstd{quali_index_full,}
+    \hlstd{quanti_index_full)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in rownames(X): object 'processed\_datasets' not found}}\begin{alltt}
+\hlstd{unique_cols} \hlkwb{<-} \hlkwd{apply}\hlstd{(processed_datasets}\hlopt{$}\hlstd{test,}
+    \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{length}\hlstd{(}\hlkwd{unique}\hlstd{(x))} \hlopt{==}
+        \hlnum{1}\hlstd{)} \hlopt{%>%} \hlstd{which}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in apply(processed\_datasets\$test, 2, function(x) length(unique(x)) == : object 'processed\_datasets' not found}}\begin{alltt}
+\hlstd{quanti_index_full_mca} \hlkwb{<-} \hlkwd{lapply}\hlstd{(quanti,}
+    \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{grep}\hlstd{(}\hlkwc{x} \hlstd{=} \hlkwd{colnames}\hlstd{(processed_datasets}\hlopt{$}\hlstd{test[,}
+        \hlopt{-}\hlstd{unique_cols]),}
+        \hlkwc{pattern} \hlstd{= x))} \hlopt{%>%}
+    \hlstd{unlist}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(x): object 'processed\_datasets' not found}}\begin{alltt}
+\hlstd{quali_index_full_mca} \hlkwb{<-} \hlkwd{lapply}\hlstd{(}\hlkwd{c}\hlstd{(}\hlstr{"et"}\hlstd{,}
+    \hlstd{quali),} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{grep}\hlstd{(}\hlkwc{x} \hlstd{=} \hlkwd{colnames}\hlstd{(processed_datasets}\hlopt{$}\hlstd{test[,}
+    \hlopt{-}\hlstd{unique_cols]),} \hlkwc{pattern} \hlstd{= x))} \hlopt{%>%}
+    \hlstd{unlist}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(x): object 'processed\_datasets' not found}}\begin{alltt}
+\hlstd{test_sup_proj_data_full} \hlkwb{<-} \hlkwd{prepare_projection_data}\hlstd{(x_test,}
+    \hlkwa{NULL}\hlstd{, processed_datasets}\hlopt{$}\hlstd{test[,}
+        \hlopt{-}\hlstd{unique_cols],}
+    \hlstd{quali_index_full_mca,}
+    \hlstd{quanti_index_full_mca)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in rownames(X): object 'processed\_datasets' not found}}\end{kframe}
+\end{knitrout}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{point_size} \hlkwb{<-} \hlnum{0.5}
+\hlstd{plots_without} \hlkwb{<-} \hlkwd{make_mca_plots}\hlstd{(train_sup_proj_data,}
+    \hlstd{test_sup_proj_data,}
+    \hlstd{point_size)}
+\hlstd{plots_with} \hlkwb{<-} \hlkwd{make_mca_plots}\hlstd{(train_sup_proj_data_full,}
+    \hlstd{test_sup_proj_data_full,}
+    \hlstd{point_size,} \hlkwc{prefix} \hlstd{=} \hlstr{"etiqueta_"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ggplot(data = train\$vars, aes(x = Dim.1, y = Dim.2, col = Type)): object 'train\_sup\_proj\_data\_full' not found}}\begin{alltt}
+\hlkwd{ggsave}\hlstd{(}\hlkwc{filename} \hlstd{=} \hlkwd{file.path}\hlstd{(plot_dir,}
+    \hlstr{"mca_variables_combined.png"}\hlstd{),}
+    \hlkwc{plot} \hlstd{=} \hlkwd{plot_grid}\hlstd{(plots_without[[}\hlnum{1}\hlstd{]],}
+        \hlstd{plots_with[[}\hlnum{1}\hlstd{]],}
+        \hlkwc{labels} \hlstd{=} \hlstr{"AUTO"}\hlstd{),}
+    \hlkwc{width} \hlstd{=} \hlnum{14}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in plot\_grid(plots\_without[[1]], plots\_with[[1]], labels = "{}AUTO"{}): object 'plots\_with' not found}}\begin{alltt}
+\hlkwd{ggsave}\hlstd{(}\hlkwc{filename} \hlstd{=} \hlkwd{file.path}\hlstd{(plot_dir,}
+    \hlstr{"mca_obs_Y_facet_all_combined.png"}\hlstd{),}
+    \hlkwc{plot} \hlstd{=} \hlkwd{plot_grid}\hlstd{(plots_without[[}\hlnum{7}\hlstd{]],}
+        \hlstd{plots_with[[}\hlnum{7}\hlstd{]],}
+        \hlkwc{nrow} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{labels} \hlstd{=} \hlstr{"AUTO"}\hlstd{),}
+    \hlkwc{width} \hlstd{=} \hlnum{14}\hlstd{,} \hlkwc{height} \hlstd{=} \hlnum{14}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in plot\_grid(plots\_without[[7]], plots\_with[[7]], nrow = 2, labels = "{}AUTO"{}): object 'plots\_with' not found}}\end{kframe}
+\end{knitrout}
+
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.7\textwidth]{plots/mca_variables_combined}
+\caption{Visualization of the contribution of each categorical variable to the most informative MCA 2D plane. Nominal variables seemed to bring the most information. \textbf{A} Without etiquetas. \textbf{B} With etiquetas.}
+\label{fig:mca_variables}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.7\textwidth]{plots/mca_obs_Y_facet_all_combined}
+\caption{A visualization of the individuals on the MCA 2D plane facetted by label. A clear separation is visible for some individuals, clustering around the top left corner of the plot. A very similar pattern is observed in the test set. \textbf{A} Without etiquetas. \textbf{B} With etiquetas.}
+\label{fig:mca_obs_Y}
+\end{figure}
+
+The analysis is able to successfuly find a pattern whereby individuals clustering in the top left corner are highly likely to be of class 0 (Y=0). The features extracted in this analysis will be added to the processed data in order to make use of their predictive power in the model training. Remarkably, if MCA is conducted without etiquetas, many individuals are projected on the same spot of the 2D plane. This effect is canceled when etiquetas are included, indicating that indeed etiquetas contribute to each of the individuals' diversity. FOr this reason, the top 5 MCA features produced when including etiquetas will be used to power the models.
+
+\subsection{Heatmap}
+
+Finally, a heatmap (figure \ref{fig:heatmap}) is an alternative way to visualize the presence of any patterns in the processed dataset.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{idx} \hlkwb{<-} \hlkwd{sample}\hlstd{(}\hlkwc{x} \hlstd{=} \hlnum{1}\hlopt{:}\hlkwd{nrow}\hlstd{(train_sup_proj_data),}
+    \hlkwc{size} \hlstd{=} \hlnum{1000}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in 1:nrow(train\_sup\_proj\_data): argument of length 0}}\begin{alltt}
+\hlstd{heatmap_data} \hlkwb{<-} \hlstd{train_sup_proj_data[idx,}
+    \hlstd{]} \hlopt{%>%} \hlstd{as.matrix}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(lhs, parent, parent): object 'idx' not found}}\begin{alltt}
+\hlstd{heatmap} \hlkwb{<-} \hlkwd{pheatmap}\hlstd{(heatmap_data,}
+    \hlkwc{annotation_row} \hlstd{=} \hlkwd{select}\hlstd{(x_train[idx,}
+        \hlstd{], raza, sexo,}
+        \hlstd{edad_integer),}
+    \hlkwc{scale} \hlstd{=} \hlstr{"row"}\hlstd{,} \hlkwc{filename} \hlstd{=} \hlkwd{file.path}\hlstd{(plot_dir,}
+        \hlstr{"heatmap.png"}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in rownames(mat): object 'heatmap\_data' not found}}\begin{alltt}
+\hlkwd{write}\hlstd{(}\hlkwc{x} \hlstd{=} \hlkwd{kable}\hlstd{(}\hlkwc{x} \hlstd{= datos[,}
+    \hlstd{datos} \hlopt{%>%} \hlstd{colnames} \hlopt{%>%}
+        \hlkwd{grep}\hlstd{(}\hlkwc{pattern} \hlstd{=} \hlstr{"counter"}\hlstd{,}
+            \hlkwc{x} \hlstd{= .)]} \hlopt{%>%}
+    \hlkwd{lapply}\hlstd{(.,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{length}\hlstd{(}\hlkwd{table}\hlstd{(x)))} \hlopt{%>%}
+    \hlstd{unlist} \hlopt{%>%} \hlstd{sort} \hlopt{%>%}
+    \hlstd{rev),} \hlkwc{file} \hlstd{=} \hlkwd{file.path}\hlstd{(tables_dir,}
+    \hlstr{"counters_overview.tex"}\hlstd{))}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(lhs, parent, parent): object 'datos' not found}}\end{kframe}
+\end{knitrout}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{save}\hlstd{(}\hlkwc{list} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"heatmap"}\hlstd{),}
+    \hlkwc{file} \hlstd{=} \hlkwd{file.path}\hlstd{(rdata_dir,}
+        \hlstr{"heatmap.RData"}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{load}\hlstd{(}\hlkwd{file.path}\hlstd{(rdata_dir,}
+    \hlstr{"heatmap.RData"}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.7\textwidth]{plots/heatmap}
+\caption{}
+\label{fig:heatmap}
+\end{figure}
+
+\subsection{Improvements to the EDA}
+
+More insights could be extracted by performing supervised projections of the dataset, where new highly informative planes are found taking into account the label.
+
+\subsection{Export features}
+
+  
+\end{document}

@@ -52,46 +52,86 @@
   keywordstyle=\color{blue}
 }
 
+\graphicspath{{plots}}
+
   
 \begin{document}
 <<setup, include=FALSE, cache=FALSE>>=
 library(knitr)
-library(kableExtra)
+# library(kableExtra)
 # set global chunk options
-opts_chunk$set(fig.path='figure/minimal-', fig.align='center', message = F, warning = F, fig.show='hold', fig.width=10, fig.height = 5, eval = T, echo = T, include = T, root.dir = "/home/antortjim/MEGA/Kaggle/Datrik", tidy=TRUE)
+opts_chunk$set(message = F, warning = F,
+               root.dir = "/home/antortjim/MEGA/Kaggle/Datrik", tidy=TRUE)
 options(formatR.arrow=TRUE, width=20, results='markup')
 
-myKable <- function(myTable, caption) {
-  kable(myTable, booktabs = T, caption = caption) %>%
-  kable_styling(latex_options = c("striped", "hold_position"))
-}
+opts_template$set(main = list(echo = T, include = F, eval = F))
+opts_template$set(save = list(echo = F, include = F, eval = F))
+opts_template$set(load = list(echo = F, include = F, eval = T))
+
+
+# myKable <- function(myTable, caption) {
+#   kable(myTable, booktabs = T, caption = caption) %>%
+#   kable_styling(latex_options = c("striped", "hold_position"))
+# }
 @
 
-<<echo = F, include = F>>=
-read_chunk('script.R')
+<<external-code, echo = F, include = F, cache=FALSE>>=
+read_chunk('EDA.R')
 @
 
 
-\title{Prueba técnica}
-\subtitle{Acceso a Junior Data Scientist en Datrik}
+\title{Technical test}
+\subtitle{Junior Data Scientist position at Datrik Intelligence}
 \author{Antonio Ortega}
+\maketitle
 
-Load libraries
-<<load_libraries, echo = T, include = F, fig.height=10>>=
+\section{Introduction}
+
+The dataset provided presents a classification problem, whereby the power of several features is to be harnessed to predict a binary label (1/0). A summary of the features available is presented in table \ref{tab:summary}
+
+\begin{table}[!h]
+\centering
+\input{tables/data_summary.tex}
+\caption{46 features are provided together with an identifier variable (\textit{identificador}) and the label to be predicted \textit{Y}.}
+\label{tab:summary}
+\end{table}
+
+Y, the target variable, is to be predicted using the information stored in the remaining features by means of (I) a linear model, and (II) a gradient boosting model. But first, the data needs to be preprocessed into a format that suits these algorithms. This is carried out in the R script \texttt{EDA.R}. A guide-through of the code is provided below.
+
+\section{EDA}
+
+\subsection{Load libraries}
+<<load_libraries, opts.label='main', eval=T>>=
 @
 
-Load data
-<<load_data, echo = T, include = F, fig.height=10>>=
+\subsection{Load data}
+Read the \texttt{datos.csv} file and split the training/validation set and the test set.
+<<load_data, opts.label='main'>>=
+@
+<<load_data_save, opts.label='save'>>=
+@
+<<load_data_load, opts.label='load'>>=
 @
 
-Distribution of main categories over data
-<<plots1, echo = T, include = T, fig.height=10>>=
+
+\subsection{Visualization of race and age}
+A general picture of how the potentially relevant categories race and age dataset are distributed across the individuals is shown in figure \ref{fig:categories}.
+
+<<plots1, opts.label='main'>>=
 @
-
-
-Define a function to preprocess the train dataset and prepare it for the machine learning algorithms
-The test set will follow a preprocessing parallel to the train
   
+\begin{figure}[!h]
+\includegraphics[width=\textwidth]{plots/visualize_categories.png}
+\caption{\textbf{A} Waffle plot showing the race distribution. A majority of the individuals are defined as Caucasian, with Afro Americans making up a significant though minor proportion. The remanining individuals are Hispanic, Asian and from other groups. \textbf{B} A histogram over the age groups reveals a trend for individuals to be aged 50 and 90 years old.}
+\label{fig:categories}
+\end{figure}
+  
+The non uniform distribution of individuals over these categories and eventually many others showcases the existence of some bias in the data.
+
+\subsection{Preprocess the training and test sets}
+
+Define a function to preprocess the train dataset and prepare it for the machine learning algorithms. The test set will follow a preprocessing parallel to the train
+
 \begin{itemize}
 \item Numerical variabels stay the same (quantitative)
 \item Ordinal variables (categories with order) stay the same (quantitative)
@@ -100,35 +140,96 @@ The test set will follow a preprocessing parallel to the train
 \item Binary stays the same (qualitiative)
 \item Race is reformatted to one-hot (qualitiative)
 \item Sex stays the same (only made into 1/0) (qualitiative)
-\item Etiquettes. There is room for 3 etiquetas, but it is only their presence that matters. Therefore they are passed to one-hot encoding, thus, the i,j cell will show how many times the jth etiqueta is present in the ith sample i.e. 0 to 3 times if it appears in the 3 slots. (qualitiative)
+\item Etiquetas. There is room for 3 etiquetas, but it is only their presence that matters. Therefore they are passed to one-hot encoding. The i,j cell will store how many times the jth etiqueta is present in the ith sample i.e. 0 to 3 times if it appears in none or 3 slots, respectively (qualitiative)
+\end{itemize}
+
+<<preprocess_function, opts.label='main'>>=
+@
+   
+Apply the function
+<<preprocess, opts.label='main'>>=
+@
+
+<<preprocess_etiqueta, opts.label='main'>>=
+@
   
-<<preprocess_function, echo = T, include = F, fig.height=10>>=
+<<preprocess_save, opts.label='save'>>=
 @
 
-Preprocess datasets
-<<preprocess, echo = T, include = F, fig.height=10>>=
+<<preprocess_load, opts.label='load'>>=
+@
+  
+  
+\subsection{\textbf{P}rincipal \textbf{C}omponent \textbf{A}nalysis (PCA)}
+
+The distribution of edad (age), raza (race), gender (sexo) and Y (label) across individuals on the 2D plane
+capturing the most variance can be visualized by means of a PCA. The PCA takes numerical features and rotates them into a new space where variance (information) is maximised on each new feature (principal component). The first two can be used to generate the mentioned 2D plane. This is shown in figure \ref{fig:pca_multicategory}
+<<PCA, opts.label='main'>>=
+@
+<<PCA_visualization, opts.label='main'>>=
 @
 
-PCA
-<<PCA, echo = T, include = F, fig.height=10>>=
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.7\textwidth]{plots/PCA_multicategory}
+\caption{PCA plots for individuals colored by race, gender, age and label. No category seems to be distinguishable on the 2D plane in any of the features probed.}
+\label{fig:pca_multicategory}
+\end{figure}
+
+The PCA did not successfully evidence any clear pattern.
+
+\subsection{\textbf{M}ultiple \textbf{C}orrespondence \textbf{A}nalysis (MCA)}
+
+An analogous analysis can be performed using categorical variables with the MCA algorithm from the R package FactoMineR. The algorithm was run with and without etiquetas (tags) to explore if saving these ensemble of one-hot features could be spared for computational efficiency. A plot of the contribution of the explored variables to the new 2D plane is shown in figure \ref{fig:mca_variables}, whereas a plot of the individuals in this plane is shown on figure \ref{fig:mca_obs_Y}.
+
+<<MCA_functions, opts.label='main', eval=T>>=
 @
-<<PCA_visualization, echo = T, include = T, fig.height=10>>=
+<<MCA, ops.label='main'>>=
+@
+<<MCA_visualization, ops.label='main'>>=
 @
 
-MCA
-<<MCA_function, echo = T, include = F, fig.height=10>>=
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.7\textwidth]{plots/mca_variables_combined}
+\caption{Visualization of the contribution of each categorical variable to the most informative MCA 2D plane. Nominal variables seemed to bring the most information. \textbf{A} Without etiquetas. \textbf{B} With etiquetas.}
+\label{fig:mca_variables}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.7\textwidth]{plots/mca_obs_Y_facet_all_combined}
+\caption{A visualization of the individuals on the MCA 2D plane facetted by label. A clear separation is visible for some individuals, clustering around the top left corner of the plot. A very similar pattern is observed in the test set. \textbf{A} Without etiquetas. \textbf{B} With etiquetas.}
+\label{fig:mca_obs_Y}
+\end{figure}
+
+The analysis, whose results are shown in figures the mentioned figures, is able to successfuly find a pattern whereby individuals clustering in the top left corner are highly likely to be of class 0 (Y=0). The features extracted in this analysis will be added to the processed data in order to make use of their predictive power in the model training. Remarkably, if MCA is conducted without etiquetas, many individuals are projected on the same spot of the 2D plane. This effect is canceled when etiquetas are included, indicating that indeed etiquetas contribute to each of the individuals' diversity. FOr this reason, the top 5 MCA features produced when including etiquetas will be used to power the models.
+
+\subsection{Heatmap}
+
+Finally, a heatmap (figure \ref{fig:heatmap}) is an alternative way to visualize the presence of any patterns/clustering in the processed dataset.
+
+<<heatmap, ops.label='main'>>=
 @
-<<MCA, echo = T, include = F, fig.height=10>>=
+<<heatmap_save, ops.label='save'>>=
 @
-<<MCA_visualization, echo = T, include = F, fig.height=10>>=
-@
-<<MCA_features, echo = T, include = F, fig.height=10>>=
+<<heatmap_load, ops.label='load'>>=
 @
 
-Heatmap
-<<Heatmap, echo = T, include = T, fig.height=10>>=
-@
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.7\textwidth]{plots/heatmap}
+\caption{Heatmap of the training set including the top 5 MCA features. As expected, age and the counters with the most levels/categories are the first splitting features. However, the MCA features don't seem to contribute to the clustering.}
+\label{fig:heatmap}
+\end{figure}
 
-Export features
-<<export_data, echo = T, include = T, fig.height=10>>=
+\subsection{Improvements to the EDA}
+
+More insights could be extracted by performing supervised projections of the dataset, where new highly informative planes are found taking into account the label. Moreover, more intensive processing like the usage of an autoencoder
+
+\subsection{Export features}
+<<export_data,opts.label='main'>>=
 @
+  
+\end{document}
