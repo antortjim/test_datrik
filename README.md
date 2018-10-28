@@ -6,7 +6,7 @@ This repo contains the R and Python code written to:
 
 2.- Build linear and gradient boosting models. This is available in the jupyter notebook `models.ipynb`.
 
-3.- Produce a comprehensive documentation of the process, produced automatically by joining the Latex code in `report.Rnw` with the code in `EDA.R` R script.
+3.- Produce a comprehensive documentation of the process, produced automatically by joining the Latex code in `report.Rnw` with the code in the `EDA.R` R script.
 
 Directory structure:
 
@@ -14,3 +14,9 @@ Directory structure:
 * `RData`saves R objects to save computation power
 * `proc_data` contains the processed dataset at different stages.
 * `tables` stores tables produced by R/Python and shown in the report.
+* `predictions` stores the prediction files produced by the Python models with 2 columns: identificador and prediction, including header.
+
+Create the documents by running the `EDA.R` and `models.ipynb` files with the described directory structure followed by
+```
+./prepare_submission.sh
+```
