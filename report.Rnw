@@ -64,7 +64,7 @@ opts_chunk$set(message = F, warning = F,
                root.dir = "/home/antortjim/MEGA/Kaggle/Datrik", tidy=TRUE)
 options(formatR.arrow=TRUE, width=20, results='markup')
 
-opts_template$set(main = list(echo = T, include = F, eval = F))
+opts_template$set(main = list(echo = T, include = T, eval = F))
 opts_template$set(save = list(echo = F, include = F, eval = F))
 opts_template$set(load = list(echo = F, include = F, eval = T))
 
@@ -87,7 +87,7 @@ read_chunk('EDA.R')
 
 \section{Introduction}
 
-The dataset provided presents a classification problem, whereby the power of several features is to be harnessed to predict a binary label (1/0). A summary of the features available is presented in table \ref{tab:summary}
+The dataset provided presents a classification problem, whereby the power of several features is to be harnessed to predict a binary label (1/0). A summary of the features available is presented in table \ref{tab:summary}.
 
 \begin{table}[!h]
 \centering
@@ -101,7 +101,7 @@ Y, the target variable, is to be predicted using the information stored in the r
 \section{EDA}
 
 \subsection{Load libraries}
-<<load_libraries, opts.label='main', eval=T>>=
+<<load_libraries, opts.label='main', eval=T, echo=T>>=
 @
 
 \subsection{Load data}
@@ -146,7 +146,7 @@ Define a function to preprocess the train dataset and prepare it for the machine
 <<preprocess_function, opts.label='main'>>=
 @
    
-Apply the function
+Apply the function to preprocess the training and test datasets in parallel.
 <<preprocess, opts.label='main'>>=
 @
 
@@ -164,10 +164,6 @@ Apply the function
 
 The distribution of edad (age), raza (race), gender (sexo) and Y (label) across individuals on the 2D plane
 capturing the most variance can be visualized by means of a PCA. The PCA takes numerical features and rotates them into a new space where variance (information) is maximised on each new feature (principal component). The first two can be used to generate the mentioned 2D plane. This is shown in figure \ref{fig:pca_multicategory}
-<<PCA, opts.label='main'>>=
-@
-<<PCA_visualization, opts.label='main'>>=
-@
 
 \begin{figure}[!h]
 \centering
@@ -182,11 +178,16 @@ The PCA did not successfully evidence any clear pattern.
 
 An analogous analysis can be performed using categorical variables with the MCA algorithm from the R package FactoMineR. The algorithm was run with and without etiquetas (tags) to explore if saving these ensemble of one-hot features could be spared for computational efficiency. A plot of the contribution of the explored variables to the new 2D plane is shown in figure \ref{fig:mca_variables}, whereas a plot of the individuals in this plane is shown on figure \ref{fig:mca_obs_Y}.
 
-<<MCA_functions, opts.label='main', eval=T>>=
+<<MCA_functions, eval=T, echo=T, include=F>>=
 @
-<<MCA, ops.label='main'>>=
+<<MCA, eval=F, echo=T, include=T>>=
 @
-<<MCA_visualization, ops.label='main'>>=
+<<MCA_save, ops.label='save'>>=
+@
+<<MCA_load, ops.label='load'>>=
+@
+
+<<MCA_visualization, eval=F, echo=F, include=F>>=
 @
 
 
@@ -226,10 +227,36 @@ Finally, a heatmap (figure \ref{fig:heatmap}) is an alternative way to visualize
 
 \subsection{Improvements to the EDA}
 
-More insights could be extracted by performing supervised projections of the dataset, where new highly informative planes are found taking into account the label. Moreover, more intensive processing like the usage of an autoencoder
+More insights could be extracted by performing supervised projections of the dataset, where new highly informative planes are found taking into account the label. Moreover, more intensive processing, like the usage of an autoencoder, could be used to perform more powerful dimensionality reduction on the categorical variables, specillay the etiquetas.
 
 \subsection{Export features}
 <<export_data,opts.label='main'>>=
 @
-  
+
+\section{Session info}
+\begin{itemize}
+\item 12 GB RAM
+\item 8 processors Intel(R) Core(TM) i7-6700HQ CPU at 2.60GHz
+\end{itemize}
+
+<<session_info,opts.label='main', eval=T>>=
+@
+
+\section{Appendix}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.7\textwidth]{plots/etiqueta_mca_obs_race_facet}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.7\textwidth]{plots/etiqueta_mca_obs_Y_facet_edad_col}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.7\textwidth]{plots/etiqueta_mca_obs_Y_facet_raza_col}
+\end{figure}
+
 \end{document}
