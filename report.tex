@@ -231,8 +231,8 @@ The distribution of edad (age), raza (race), gender (sexo) and Y (label) across 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=\textwidth]{plots/PCA_multicategory}
-\caption{PCA plots for individuals colored by race, gender, age and label. No category seems to be distinguishable on the 2D plane in any of the features probed.}
+\includegraphics[width=.7\textwidth]{plots/PCA_multicategory}
+\caption{PCA plots for individuals colored by race, gender, age and label. No category seems to be clearly clustering on the 2D plane in any of the 4 features probed.}
 \label{fig:pca_multicategory}
 \end{figure}
 
@@ -244,14 +244,14 @@ An analogous analysis can be performed using categorical variables with the MCA 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.7\textwidth]{plots/mca_variables_combined}
+\includegraphics[width=.7\textwidth]{plots/mca_variables_combined}
 \caption{Visualization of the contribution of each categorical variable to the most informative MCA 2D plane. Etiquetas and nominal variables seemed to bring the most information. \textbf{A} Without etiquetas. \textbf{B} With etiquetas.}
 \label{fig:mca_variables}
 \end{figure}
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.7\textwidth]{plots/mca_obs_Y_facet_all_combined}
+\includegraphics[width=.7\textwidth]{plots/mca_obs_Y_facet_all_combined}
 \caption{A visualization of the individuals on the MCA 2D plane facetted by label. A clear separation is visible for some individuals, clustering around the top left corner of the plot. A very similar pattern is observed in the test set. \textbf{A} Without etiquetas. \textbf{B} With etiquetas.}
 \label{fig:mca_obs_Y}
 \end{figure}
@@ -261,46 +261,28 @@ The analysis, whose results are shown in figures the mentioned figures, is able 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.7\textwidth]{plots/etiqueta_mca_contrib}
+\includegraphics[width=\textwidth]{plots/etiqueta_mca_contrib}
 \caption{Top 30 variables contributing to the overall variance found by the MCA ordered by its size and coloured by type.}
 \label{fig:mca_contrib}
 \end{figure}
+
+\newpage
 \subsection{Heatmap}
 
 Finally, a heatmap (figure \ref{fig:heatmap}) is an alternative way to visualize the presence of any patterns/clustering in the processed dataset.
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.7\textwidth]{plots/heatmap}
+\includegraphics[width=.5\textwidth]{plots/heatmap}
 \caption{Heatmap of the training set including the top 5 MCA features. As expected, age and the counters with the most levels/categories are the first splitting features. However, the MCA features don't seem to contribute to the clustering.}
 \label{fig:heatmap}
 \end{figure}
 
-\subsection{Improvements to the EDA}
+\section{Discussion}
 
-More insights could be extracted by performing supervised projections of the dataset, where new highly informative planes are found taking into account the label. Moreover, more intensive processing, like the usage of an autoencoder, could be used to perform more powerful dimensionality reduction on the categorical variables, specially the etiquetas.
+More insights could be extracted by performing supervised projections of the dataset, where new highly informative planes are found taking into account the label. Moreover, more intensive processing, like the usage of an autoencoder, could be used to perform more powerful dimensionality reduction on the categorical variables, specially the etiquetas. The MCA analysis also indicates which could be the most important features. Further work engineering them is expected to improve model performance.
 
-\subsection{Export features}
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlcom{# Save processed datasets without one-hot encoding data but with mca features}
-\hlkwd{write.table}\hlstd{(}\hlkwc{x} \hlstd{= train_sup_proj_data}\hlopt{$}\hlstd{proj,} \hlkwc{file} \hlstd{=} \hlkwd{file.path}\hlstd{(output_data,} \hlstr{"x_train_mca.csv"}\hlstd{),}
-    \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{,} \hlkwc{row.names} \hlstd{= x_train}\hlopt{$}\hlstd{identificador,} \hlkwc{quote} \hlstd{= F,} \hlkwc{col.names} \hlstd{= T)}
-\hlkwd{write.table}\hlstd{(}\hlkwc{x} \hlstd{= test_sup_proj_data}\hlopt{$}\hlstd{proj,} \hlkwc{file} \hlstd{=} \hlkwd{file.path}\hlstd{(output_data,} \hlstr{"x_test_mca.csv"}\hlstd{),}
-    \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{,} \hlkwc{row.names} \hlstd{= x_test}\hlopt{$}\hlstd{identificador,} \hlkwc{quote} \hlstd{= F,} \hlkwc{col.names} \hlstd{= T)}
 
-\hlkwd{write.table}\hlstd{(}\hlkwc{x} \hlstd{= train_sup_proj_data_full}\hlopt{$}\hlstd{proj,} \hlkwc{file} \hlstd{=} \hlkwd{file.path}\hlstd{(output_data,} \hlstr{"x_train_mca_full.csv"}\hlstd{),}
-    \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{,} \hlkwc{row.names} \hlstd{= x_train}\hlopt{$}\hlstd{identificador,} \hlkwc{quote} \hlstd{= F,} \hlkwc{col.names} \hlstd{= T)}
-\hlkwd{write.table}\hlstd{(}\hlkwc{x} \hlstd{= test_sup_proj_data_full}\hlopt{$}\hlstd{proj,} \hlkwc{file} \hlstd{=} \hlkwd{file.path}\hlstd{(output_data,} \hlstr{"x_test_mca_full.csv"}\hlstd{),}
-    \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{,} \hlkwc{row.names} \hlstd{= x_test}\hlopt{$}\hlstd{identificador,} \hlkwc{quote} \hlstd{= F,} \hlkwc{col.names} \hlstd{= T)}
-
-\hlcom{# Save label to a separate file}
-\hlkwd{write.table}\hlstd{(}\hlkwc{x} \hlstd{= y_train,} \hlkwc{file} \hlstd{=} \hlkwd{file.path}\hlstd{(output_data,} \hlstr{"y_train.csv"}\hlstd{),} \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{,}
-    \hlkwc{row.names} \hlstd{= x_train}\hlopt{$}\hlstd{identificador,} \hlkwc{quote} \hlstd{= F,} \hlkwc{col.names} \hlstd{= T)}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
 
 \section{Session info}
 \begin{itemize}
@@ -331,7 +313,7 @@ More insights could be extracted by performing supervised projections of the dat
 ## [11] LC_MEASUREMENT=es_ES.UTF-8 LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## [1] stats     graphics  grDevices utils     datasets  base     
 ## 
 ## other attached packages:
 ##  [1] kableExtra_0.9.0  pheatmap_1.0.10   cowplot_0.9.2     FactoMineR_1.41  
@@ -347,16 +329,16 @@ More insights could be extracted by performing supervised projections of the dat
 ## [13] plyr_1.8.4           munsell_0.5.0        gtable_0.2.0        
 ## [16] rvest_0.3.2          codetools_0.2-15     leaps_3.0           
 ## [19] evaluate_0.10.1      extrafont_0.17       curl_3.2            
-## [22] Rttf2pt1_1.3.6       highr_0.7            Rcpp_0.12.19        
-## [25] readr_1.1.1          scales_1.0.0.9000    backports_1.1.2     
-## [28] flashClust_1.01-2    formatR_1.5          scatterplot3d_0.3-41
-## [31] gridExtra_2.3        hms_0.4.2            digest_0.6.18       
-## [34] stringi_1.2.4        grid_3.4.4           rprojroot_1.3-2     
-## [37] tools_3.4.4          lazyeval_0.2.1       cluster_2.0.7-1     
-## [40] crayon_1.3.4         extrafontdb_1.0      pkgconfig_2.0.2     
-## [43] MASS_7.3-48          xml2_1.2.0           httr_1.3.1          
-## [46] rstudioapi_0.8       assertthat_0.2.0     rmarkdown_1.10      
-## [49] R6_2.3.0             compiler_3.4.4
+## [22] Rttf2pt1_1.3.6       highr_0.7            methods_3.4.4       
+## [25] Rcpp_0.12.19         readr_1.1.1          scales_1.0.0.9000   
+## [28] backports_1.1.2      flashClust_1.01-2    formatR_1.5         
+## [31] scatterplot3d_0.3-41 gridExtra_2.3        hms_0.4.2           
+## [34] digest_0.6.18        stringi_1.2.4        grid_3.4.4          
+## [37] rprojroot_1.3-2      tools_3.4.4          lazyeval_0.2.1      
+## [40] cluster_2.0.7-1      crayon_1.3.4         extrafontdb_1.0     
+## [43] pkgconfig_2.0.2      MASS_7.3-48          xml2_1.2.0          
+## [46] httr_1.3.1           rstudioapi_0.8       assertthat_0.2.0    
+## [49] rmarkdown_1.10       R6_2.3.0             compiler_3.4.4
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -387,6 +369,11 @@ More insights could be extracted by performing supervised projections of the dat
 \begin{alltt}
 \hlstd{preprocess_data} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{x_train}\hlstd{,} \hlkwc{x_test}\hlstd{,} \hlkwc{etiquettes} \hlstd{=} \hlnum{FALSE}\hlstd{) \{}
 
+    \hlcom{# Every feature is preprocessed in groups according to their type (nominal,}
+    \hlcom{# ordinal, etc) Train and test sets have separate pieces of code for 'hygiene',}
+    \hlcom{# even if it implies code cluttering The result for each group is a list with the}
+    \hlcom{# processed data for the training and test set respectively, in data.frame format}
+
     \hlkwa{if} \hlstd{(etiquettes) \{}
         \hlcom{## Preprocess etiquettes}
         \hlkwd{print}\hlstd{(}\hlstr{"Processing etiquettes"}\hlstd{)}
@@ -394,50 +381,64 @@ More insights could be extracted by performing supervised projections of the dat
         \hlstd{test_etiquettes} \hlkwb{<-} \hlstd{x_test[,} \hlkwd{c}\hlstd{(}\hlstr{"etiqueta_1"}\hlstd{,} \hlstr{"etiqueta_2"}\hlstd{,} \hlstr{"etiqueta_3"}\hlstd{)]}
         \hlkwd{rownames}\hlstd{(train_etiquettes)} \hlkwb{<-} \hlstd{x_train}\hlopt{$}\hlstd{identificador}
         \hlkwd{rownames}\hlstd{(test_etiquettes)} \hlkwb{<-} \hlstd{x_test}\hlopt{$}\hlstd{identificador}
+
+        \hlcom{# Extract a vector storing all the etiquetas occuring in the TRAINING SET ONLY}
         \hlstd{unique_etiquettes} \hlkwb{<-} \hlstd{train_etiquettes} \hlopt{%>%} \hlstd{unlist} \hlopt{%>%} \hlstd{unique} \hlopt{%>%} \hlstd{sort}
 
+        \hlcom{# Encode the etiquetas in format one-hot Initialize of vector of counts of}
+        \hlcom{# etiquetas to 0 to all of them}
         \hlstd{etiquettes_template} \hlkwb{<-} \hlkwd{rep}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwd{length}\hlstd{(unique_etiquettes))}
         \hlkwd{names}\hlstd{(etiquettes_template)} \hlkwb{<-} \hlstd{unique_etiquettes}
+
+        \hlcom{# For both train and test set}
         \hlstd{etiquettes_proc} \hlkwb{<-} \hlkwd{lapply}\hlstd{(}\hlkwd{list}\hlstd{(}\hlkwc{train} \hlstd{= train_etiquettes,} \hlkwc{test} \hlstd{= test_etiquettes),}
             \hlkwa{function}\hlstd{(}\hlkwc{y}\hlstd{) \{}
+                \hlcom{# For every row, apply the same function}
                 \hlstd{res} \hlkwb{<-} \hlstd{y} \hlopt{%>%} \hlstd{as.matrix} \hlopt{%>%} \hlkwd{apply}\hlstd{(.,} \hlnum{1}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{) \{}
+                  \hlcom{# Count how many times each etiqueta appears This returns a table with the counts}
+                  \hlcom{# of the etiquetas appearing in this individual but not the ones not appearing}
+                  \hlcom{# (which obv should be 0)}
                   \hlstd{local_count} \hlkwb{<-} \hlkwd{table}\hlstd{(x)}
+                  \hlcom{# Set the counts of the template to 0}
                   \hlstd{et} \hlkwb{<-} \hlstd{etiquettes_template}
-                  \hlcom{# drop any etiquette that's not in the training set}
+                  \hlcom{# Drop any etiquette that's not in the training set. Makes sense when analyzing}
+                  \hlcom{# test set}
                   \hlstd{local_count} \hlkwb{<-} \hlstd{local_count[}\hlkwd{names}\hlstd{(local_count)} \hlopt{%in%} \hlkwd{names}\hlstd{(et)]}
+                  \hlcom{# Set the counts of the found etiquetas to the right count}
                   \hlstd{et[}\hlkwd{names}\hlstd{(local_count)]} \hlkwb{<-} \hlstd{local_count}
                   \hlkwd{return}\hlstd{(et)}
                 \hlstd{\})} \hlopt{%>%} \hlstd{t} \hlopt{%>%} \hlstd{unlist}
+
+                \hlcom{# Format the colnames of the etiquetas so they start with the et_ prefix}
                 \hlkwd{colnames}\hlstd{(res)} \hlkwb{<-} \hlkwd{paste0}\hlstd{(}\hlstr{"et_"}\hlstd{,} \hlkwd{colnames}\hlstd{(res))}
+                \hlcom{# Make the data structure a data.frame of factors}
                 \hlstd{res} \hlkwb{<-} \hlstd{res} \hlopt{%>%} \hlkwd{apply}\hlstd{(.,} \hlnum{2}\hlstd{, as.factor)} \hlopt{%>%} \hlstd{as.data.frame}
                 \hlkwd{return}\hlstd{(res)}
             \hlstd{\})}
-
-        \hlcom{# etiquettes_proc$train %>% View OK}
     \hlstd{\}}
 
     \hlcom{## Preprocess nominals}
     \hlkwd{print}\hlstd{(}\hlstr{"Processing nominals"}\hlstd{)}
-    \hlcom{# Drop nominal 4 for now Should remove the last column produced with each nominal}
+    \hlcom{# Drop nominal 4 Make one-hot encoding using acm.disjonctif}
     \hlstd{train_nominals_one_hot} \hlkwb{<-} \hlstd{x_train} \hlopt{%>%} \hlkwd{select}\hlstd{(nominal_1}\hlopt{:}\hlstd{nominal_3)} \hlopt{%>%} \hlkwd{acm.disjonctif}\hlstd{()} \hlopt{%>%}
         \hlkwd{apply}\hlstd{(.,} \hlnum{2}\hlstd{, as.factor)} \hlopt{%>%} \hlstd{as.data.frame}
     \hlstd{test_nominals_one_hot} \hlkwb{<-} \hlstd{x_test} \hlopt{%>%} \hlkwd{select}\hlstd{(nominal_1}\hlopt{:}\hlstd{nominal_3)} \hlopt{%>%} \hlkwd{acm.disjonctif}\hlstd{()} \hlopt{%>%}
         \hlkwd{apply}\hlstd{(.,} \hlnum{2}\hlstd{, as.factor)} \hlopt{%>%} \hlstd{as.data.frame}
 
+    \hlcom{# Drop the nominal categories not present in the training set}
     \hlstd{missing_nominal_test} \hlkwb{<-} \hlkwd{colnames}\hlstd{(train_nominals_one_hot)[}\hlopt{!}\hlkwd{colnames}\hlstd{(train_nominals_one_hot)} \hlopt{%in%}
         \hlkwd{colnames}\hlstd{(test_nominals_one_hot)]}
     \hlstd{missing_test} \hlkwb{<-} \hlkwd{as.data.frame}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwc{nrow} \hlstd{=} \hlkwd{nrow}\hlstd{(x_test),} \hlkwc{ncol} \hlstd{=} \hlkwd{length}\hlstd{(missing_nominal_test)))}
     \hlkwd{colnames}\hlstd{(missing_test)} \hlkwb{<-} \hlstd{missing_nominal_test}
     \hlstd{test_nominals_one_hot} \hlkwb{<-} \hlkwd{cbind}\hlstd{(test_nominals_one_hot, missing_test)[}\hlkwd{colnames}\hlstd{(train_nominals_one_hot)]}
 
+    \hlcom{# Make the list}
     \hlstd{nominals_proc} \hlkwb{<-} \hlkwd{list}\hlstd{(}\hlkwc{train} \hlstd{= train_nominals_one_hot,} \hlkwc{test} \hlstd{= test_nominals_one_hot)}
-
-    \hlstd{nominals_proc}\hlopt{$}\hlstd{train} \hlopt{%>%} \hlstd{class}
-    \hlcom{# OK}
 
     \hlcom{## Preprocess drugs (farmacos)}
     \hlkwd{print}\hlstd{(}\hlstr{"Processing drugs"}\hlstd{)}
 
+    \hlcom{# Select the farmaco features}
     \hlstd{train_drugs} \hlkwb{<-} \hlstd{x_train[,} \hlkwd{grep}\hlstd{(}\hlkwc{pattern} \hlstd{=} \hlstr{"farmaco"}\hlstd{,} \hlkwc{x} \hlstd{=} \hlkwd{colnames}\hlstd{(x_train))]}
     \hlstd{test_drugs} \hlkwb{<-} \hlstd{x_test[,} \hlkwd{grep}\hlstd{(}\hlkwc{pattern} \hlstd{=} \hlstr{"farmaco"}\hlstd{,} \hlkwc{x} \hlstd{=} \hlkwd{colnames}\hlstd{(x_test))]}
 
@@ -446,7 +447,7 @@ More insights could be extracted by performing supervised projections of the dat
         \hlnum{1}\hlstd{]}
     \hlstd{test_drugs} \hlkwb{<-} \hlstd{test_drugs[,} \hlkwd{colnames}\hlstd{(train_drugs)]}
 
-    \hlcom{# Replace strings with integer}
+    \hlcom{# Replace strings with integer and make list}
     \hlstd{drugs_proc} \hlkwb{<-} \hlkwd{list}\hlstd{(}\hlkwc{train} \hlstd{= train_drugs,} \hlkwc{test} \hlstd{= test_drugs)} \hlopt{%>%} \hlkwd{lapply}\hlstd{(}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{) \{}
         \hlstd{x[x} \hlopt{==} \hlstr{"No"}\hlstd{]} \hlkwb{<-} \hlstr{"-1"}
         \hlstd{x[x} \hlopt{==} \hlstr{"Down"}\hlstd{]} \hlkwb{<-} \hlstr{"0"}
@@ -455,13 +456,15 @@ More insights could be extracted by performing supervised projections of the dat
         \hlstd{x} \hlkwb{<-} \hlstd{x} \hlopt{%>%} \hlkwd{apply}\hlstd{(.,} \hlnum{2}\hlstd{, as.integer)} \hlopt{%>%} \hlstd{as.data.frame}
     \hlstd{\})}
 
-    \hlstd{drugs_proc}\hlopt{$}\hlstd{train} \hlopt{%>%} \hlstd{class}
 
     \hlcom{## Preprocess ordinal}
     \hlkwd{print}\hlstd{(}\hlstr{"Processing ordinals"}\hlstd{)}
 
+    \hlcom{# Select the features}
     \hlstd{train_ordinal} \hlkwb{<-} \hlstd{x_train} \hlopt{%>%} \hlkwd{select}\hlstd{(ordinal_1}\hlopt{:}\hlstd{ordinal_2)}
     \hlstd{test_ordinal} \hlkwb{<-} \hlstd{x_test} \hlopt{%>%} \hlkwd{select}\hlstd{(ordinal_1}\hlopt{:}\hlstd{ordinal_2)}
+
+    \hlcom{# Replace strings with integer and make list}
     \hlstd{ordinals_proc} \hlkwb{<-} \hlkwd{lapply}\hlstd{(}\hlkwd{list}\hlstd{(}\hlkwc{train} \hlstd{= train_ordinal,} \hlkwc{test} \hlstd{= test_ordinal),} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{) \{}
         \hlstd{x[x} \hlopt{==} \hlstr{"None"}\hlstd{]} \hlkwb{<-} \hlstr{"0"}
         \hlstd{x[x} \hlopt{==} \hlstr{"Norm"}\hlstd{]} \hlkwb{<-} \hlstr{"1"}
@@ -471,39 +474,38 @@ More insights could be extracted by performing supervised projections of the dat
         \hlstd{x}
     \hlstd{\})}
 
-    \hlstd{ordinals_proc}\hlopt{$}\hlstd{train} \hlopt{%>%} \hlstd{class}
-
-
     \hlcom{## Preprocess binary}
     \hlkwd{print}\hlstd{(}\hlstr{"Processing binaries"}\hlstd{)}
 
+    \hlcom{# Select the binary features and make them factors of 0 and 1.}
     \hlstd{train_binary} \hlkwb{<-} \hlstd{x_train} \hlopt{%>%} \hlkwd{select}\hlstd{(binary_1}\hlopt{:}\hlstd{binary_3)} \hlopt{%>%} \hlkwd{apply}\hlstd{(.,} \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{as.factor}\hlstd{(}\hlkwd{as.integer}\hlstd{(}\hlkwd{as.factor}\hlstd{(x))} \hlopt{-}
         \hlnum{1}\hlstd{))} \hlopt{%>%} \hlstd{as.data.frame}
     \hlstd{test_binary} \hlkwb{<-} \hlstd{x_test} \hlopt{%>%} \hlkwd{select}\hlstd{(binary_1}\hlopt{:}\hlstd{binary_3)} \hlopt{%>%} \hlkwd{apply}\hlstd{(.,} \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{as.factor}\hlstd{(}\hlkwd{as.integer}\hlstd{(}\hlkwd{as.factor}\hlstd{(x))} \hlopt{-}
         \hlnum{1}\hlstd{))} \hlopt{%>%} \hlstd{as.data.frame}
+
+    \hlcom{# Make the list}
     \hlstd{binary_proc} \hlkwb{<-} \hlkwd{list}\hlstd{(}\hlkwc{train} \hlstd{= train_binary,} \hlkwc{test} \hlstd{= test_binary)}
 
-    \hlstd{binary_proc}\hlopt{$}\hlstd{train} \hlopt{%>%} \hlstd{class}
 
     \hlcom{## Preprocess counter}
     \hlkwd{print}\hlstd{(}\hlstr{"Processing counters"}\hlstd{)}
 
+    \hlcom{# Just make the list (no need to modify them :))}
     \hlstd{counter_proc} \hlkwb{<-} \hlkwd{list}\hlstd{(}\hlkwc{train} \hlstd{= x_train} \hlopt{%>%} \hlkwd{select}\hlstd{(counter_1}\hlopt{:}\hlstd{counter_7),} \hlkwc{test} \hlstd{= x_test} \hlopt{%>%}
         \hlkwd{select}\hlstd{(counter_1}\hlopt{:}\hlstd{counter_7))}
-    \hlstd{counter_proc}\hlopt{$}\hlstd{train} \hlopt{%>%} \hlstd{class}
 
     \hlcom{## Preprocess race}
     \hlkwd{print}\hlstd{(}\hlstr{"Processing race"}\hlstd{)}
 
+    \hlcom{# Make the list while one-hot encoding the same way as nominals}
     \hlstd{race_proc} \hlkwb{<-} \hlkwd{list}\hlstd{(}\hlkwc{train} \hlstd{= x_train} \hlopt{%>%} \hlkwd{select}\hlstd{(raza)} \hlopt{%>%} \hlkwd{acm.disjonctif}\hlstd{()} \hlopt{%>%} \hlkwd{apply}\hlstd{(.,}
         \hlnum{2}\hlstd{, as.factor)} \hlopt{%>%} \hlstd{as.data.frame,} \hlkwc{test} \hlstd{= x_test} \hlopt{%>%} \hlkwd{select}\hlstd{(raza)} \hlopt{%>%} \hlkwd{acm.disjonctif}\hlstd{()} \hlopt{%>%}
         \hlkwd{apply}\hlstd{(.,} \hlnum{2}\hlstd{, as.factor)} \hlopt{%>%} \hlstd{as.data.frame)}
 
-    \hlstd{race_proc}\hlopt{$}\hlstd{train} \hlopt{%>%} \hlstd{class}
-
     \hlcom{## Preprocess sex}
     \hlkwd{print}\hlstd{(}\hlstr{"Processing sex"}\hlstd{)}
 
+    \hlcom{# Select the sex feature and process them like binaries}
     \hlstd{sex_proc} \hlkwb{<-} \hlkwd{list}\hlstd{(}\hlkwc{train} \hlstd{= x_train} \hlopt{%>%} \hlkwd{select}\hlstd{(sexo)} \hlopt{%>%} \hlkwd{apply}\hlstd{(.,} \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{as.factor}\hlstd{(}\hlkwd{as.integer}\hlstd{(}\hlkwd{as.factor}\hlstd{(x))} \hlopt{-}
         \hlnum{1}\hlstd{))} \hlopt{%>%} \hlstd{as.data.frame,} \hlkwc{test} \hlstd{= x_test} \hlopt{%>%} \hlkwd{select}\hlstd{(sexo)} \hlopt{%>%} \hlkwd{apply}\hlstd{(.,} \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)} \hlkwd{as.factor}\hlstd{(}\hlkwd{as.integer}\hlstd{(}\hlkwd{as.factor}\hlstd{(x))} \hlopt{-}
         \hlnum{1}\hlstd{))} \hlopt{%>%} \hlstd{as.data.frame)}
@@ -511,14 +513,23 @@ More insights could be extracted by performing supervised projections of the dat
     \hlcom{## Preprocess age}
     \hlkwd{print}\hlstd{(}\hlstr{"Processing age"}\hlstd{)}
 
+    \hlcom{# Select the age feature in integer format}
     \hlstd{train_age} \hlkwb{<-} \hlstd{x_train}\hlopt{$}\hlstd{edad_integer}
-    \hlstd{train_age_mean} \hlkwb{<-} \hlkwd{mean}\hlstd{(train_age,} \hlkwc{na.rm} \hlstd{= T)}
-    \hlstd{train_age[}\hlkwd{is.na}\hlstd{(train_age)]} \hlkwb{<-} \hlstd{train_age_mean}
     \hlstd{test_age} \hlkwb{<-} \hlstd{x_test}\hlopt{$}\hlstd{edad_integer}
+
+    \hlcom{# Compute the mean age in the TRAINING SET ONLY}
+    \hlstd{train_age_mean} \hlkwb{<-} \hlkwd{mean}\hlstd{(train_age,} \hlkwc{na.rm} \hlstd{= T)}
+
+    \hlcom{# Impute missing ages using this mean on both sets}
+    \hlstd{train_age[}\hlkwd{is.na}\hlstd{(train_age)]} \hlkwb{<-} \hlstd{train_age_mean}
     \hlstd{test_age[}\hlkwd{is.na}\hlstd{(test_age)]} \hlkwb{<-} \hlstd{train_age_mean}
 
+    \hlcom{# Make the list}
     \hlstd{age_proc} \hlkwb{<-} \hlkwd{list}\hlstd{(}\hlkwc{train} \hlstd{=} \hlkwd{data.frame}\hlstd{(}\hlkwc{edad_integer} \hlstd{= train_age),} \hlkwc{test} \hlstd{=} \hlkwd{data.frame}\hlstd{(}\hlkwc{edad_integer} \hlstd{= test_age))}
 
+    \hlcom{## CBIND all the features for each dataset returning a single data.frame}
+    \hlcom{## Optionally include etiquetas (huge amount of one-hot columns) Make a list for}
+    \hlcom{## each dataset}
     \hlstd{datasets} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"train"}\hlstd{,} \hlstr{"test"}\hlstd{)}
     \hlkwa{if} \hlstd{(etiquettes) \{}
         \hlstd{processed_datasets} \hlkwb{<-} \hlkwd{lapply}\hlstd{(datasets,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{) \{}
@@ -533,9 +544,38 @@ More insights could be extracted by performing supervised projections of the dat
         \hlstd{\})}
     \hlstd{\}}
 
+    \hlcom{# Name the list and return it}
     \hlkwd{names}\hlstd{(processed_datasets)} \hlkwb{<-} \hlstd{datasets}
     \hlkwd{return}\hlstd{(processed_datasets)}
 \hlstd{\}}
+
+\hlcom{## Preprocess using the function above without and with etiquetas Store the indes}
+\hlcom{## of quantitative and qualitative features}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+\newpage
+\section{Appendix C}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Save processed datasets without one-hot encoding data but with mca features}
+\hlkwd{write.table}\hlstd{(}\hlkwc{x} \hlstd{= train_sup_proj_data}\hlopt{$}\hlstd{proj,} \hlkwc{file} \hlstd{=} \hlkwd{file.path}\hlstd{(output_data,} \hlstr{"x_train_mca.csv"}\hlstd{),}
+    \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{,} \hlkwc{row.names} \hlstd{= x_train}\hlopt{$}\hlstd{identificador,} \hlkwc{quote} \hlstd{= F,} \hlkwc{col.names} \hlstd{= T)}
+\hlkwd{write.table}\hlstd{(}\hlkwc{x} \hlstd{= test_sup_proj_data}\hlopt{$}\hlstd{proj,} \hlkwc{file} \hlstd{=} \hlkwd{file.path}\hlstd{(output_data,} \hlstr{"x_test_mca.csv"}\hlstd{),}
+    \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{,} \hlkwc{row.names} \hlstd{= x_test}\hlopt{$}\hlstd{identificador,} \hlkwc{quote} \hlstd{= F,} \hlkwc{col.names} \hlstd{= T)}
+
+\hlcom{# Save processed datasets with one-hot encoding data (full) and the mca features}
+\hlcom{# found with them too}
+\hlkwd{write.table}\hlstd{(}\hlkwc{x} \hlstd{= train_sup_proj_data_full}\hlopt{$}\hlstd{proj,} \hlkwc{file} \hlstd{=} \hlkwd{file.path}\hlstd{(output_data,} \hlstr{"x_train_mca_full.csv"}\hlstd{),}
+    \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{,} \hlkwc{row.names} \hlstd{= x_train}\hlopt{$}\hlstd{identificador,} \hlkwc{quote} \hlstd{= F,} \hlkwc{col.names} \hlstd{= T)}
+\hlkwd{write.table}\hlstd{(}\hlkwc{x} \hlstd{= test_sup_proj_data_full}\hlopt{$}\hlstd{proj,} \hlkwc{file} \hlstd{=} \hlkwd{file.path}\hlstd{(output_data,} \hlstr{"x_test_mca_full.csv"}\hlstd{),}
+    \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{,} \hlkwc{row.names} \hlstd{= x_test}\hlopt{$}\hlstd{identificador,} \hlkwc{quote} \hlstd{= F,} \hlkwc{col.names} \hlstd{= T)}
+
+\hlcom{# Save label to a separate file}
+\hlkwd{write.table}\hlstd{(}\hlkwc{x} \hlstd{= y_train,} \hlkwc{file} \hlstd{=} \hlkwd{file.path}\hlstd{(output_data,} \hlstr{"y_train.csv"}\hlstd{),} \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{,}
+    \hlkwc{row.names} \hlstd{= x_train}\hlopt{$}\hlstd{identificador,} \hlkwc{quote} \hlstd{= F,} \hlkwc{col.names} \hlstd{= T)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}

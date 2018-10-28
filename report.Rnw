@@ -157,8 +157,8 @@ The distribution of edad (age), raza (race), gender (sexo) and Y (label) across 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=\textwidth]{plots/PCA_multicategory}
-\caption{PCA plots for individuals colored by race, gender, age and label. No category seems to be distinguishable on the 2D plane in any of the features probed.}
+\includegraphics[width=.7\textwidth]{plots/PCA_multicategory}
+\caption{PCA plots for individuals colored by race, gender, age and label. No category seems to be clearly clustering on the 2D plane in any of the 4 features probed.}
 \label{fig:pca_multicategory}
 \end{figure}
 
@@ -170,14 +170,14 @@ An analogous analysis can be performed using categorical variables with the MCA 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.7\textwidth]{plots/mca_variables_combined}
+\includegraphics[width=.7\textwidth]{plots/mca_variables_combined}
 \caption{Visualization of the contribution of each categorical variable to the most informative MCA 2D plane. Etiquetas and nominal variables seemed to bring the most information. \textbf{A} Without etiquetas. \textbf{B} With etiquetas.}
 \label{fig:mca_variables}
 \end{figure}
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.7\textwidth]{plots/mca_obs_Y_facet_all_combined}
+\includegraphics[width=.7\textwidth]{plots/mca_obs_Y_facet_all_combined}
 \caption{A visualization of the individuals on the MCA 2D plane facetted by label. A clear separation is visible for some individuals, clustering around the top left corner of the plot. A very similar pattern is observed in the test set. \textbf{A} Without etiquetas. \textbf{B} With etiquetas.}
 \label{fig:mca_obs_Y}
 \end{figure}
@@ -187,28 +187,28 @@ The analysis, whose results are shown in figures the mentioned figures, is able 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.7\textwidth]{plots/etiqueta_mca_contrib}
+\includegraphics[width=\textwidth]{plots/etiqueta_mca_contrib}
 \caption{Top 30 variables contributing to the overall variance found by the MCA ordered by its size and coloured by type.}
 \label{fig:mca_contrib}
 \end{figure}
+
+\newpage
 \subsection{Heatmap}
 
 Finally, a heatmap (figure \ref{fig:heatmap}) is an alternative way to visualize the presence of any patterns/clustering in the processed dataset.
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.7\textwidth]{plots/heatmap}
+\includegraphics[width=.5\textwidth]{plots/heatmap}
 \caption{Heatmap of the training set including the top 5 MCA features. As expected, age and the counters with the most levels/categories are the first splitting features. However, the MCA features don't seem to contribute to the clustering.}
 \label{fig:heatmap}
 \end{figure}
 
-\subsection{Improvements to the EDA}
+\section{Discussion}
 
-More insights could be extracted by performing supervised projections of the dataset, where new highly informative planes are found taking into account the label. Moreover, more intensive processing, like the usage of an autoencoder, could be used to perform more powerful dimensionality reduction on the categorical variables, specially the etiquetas.
+More insights could be extracted by performing supervised projections of the dataset, where new highly informative planes are found taking into account the label. Moreover, more intensive processing, like the usage of an autoencoder, could be used to perform more powerful dimensionality reduction on the categorical variables, specially the etiquetas. The MCA analysis also indicates which could be the most important features. Further work engineering them is expected to improve model performance.
 
-\subsection{Export features}
-<<export_data,opts.label='main'>>=
-@
+
 
 \section{Session info}
 \begin{itemize}
@@ -241,6 +241,11 @@ More insights could be extracted by performing supervised projections of the dat
 
 \section{Appendix B}
 <<preprocess_function, echo=T>>=
+@
+
+\newpage
+\section{Appendix C}
+<<export_data,opts.label='main'>>=
 @
 
 \end{document}
