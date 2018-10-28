@@ -1,0 +1,6 @@
+*.log
+*.out
+*.aux
+*.synctex.gz
+*.toc
+*proc_data/*

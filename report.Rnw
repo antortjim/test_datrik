@@ -62,7 +62,7 @@ library(knitr)
 # set global chunk options
 opts_chunk$set(message = F, warning = F,
                root.dir = "/home/antortjim/MEGA/Kaggle/Datrik", tidy=TRUE)
-options(formatR.arrow=TRUE, width=20, results='markup')
+options(formatR.arrow=TRUE, width=80, results='markup')
 
 opts_template$set(main = list(echo = T, include = T, eval = F))
 opts_template$set(save = list(echo = F, include = F, eval = F))
@@ -84,7 +84,18 @@ read_chunk('EDA.R')
 \subtitle{Junior Data Scientist position at Datrik Intelligence}
 \author{Antonio Ortega}
 \maketitle
+\vfill
+\begin{figure}[!h]
+\includegraphics[width=\textwidth]{plots/etiqueta_mca_obs_Y_facet_all}
+\end{figure}
 
+
+\newpage
+
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+\newpage
 \section{Introduction}
 
 The dataset provided presents a classification problem, whereby the power of several features is to be harnessed to predict a binary label (1/0). A summary of the features available is presented in table \ref{tab:summary}.
@@ -108,17 +119,11 @@ Y, the target variable, is to be predicted using the information stored in the r
 Read the \texttt{datos.csv} file and split the training/validation set and the test set.
 <<load_data, opts.label='main'>>=
 @
-<<load_data_save, opts.label='save'>>=
-@
-<<load_data_load, opts.label='load'>>=
-@
 
 
 \subsection{Visualization of race and age}
 A general picture of how the potentially relevant categories race and age dataset are distributed across the individuals is shown in figure \ref{fig:categories}.
 
-<<plots1, opts.label='main'>>=
-@
   
 \begin{figure}[!h]
 \includegraphics[width=\textwidth]{plots/visualize_categories.png}
@@ -143,31 +148,16 @@ Define a function to preprocess the train dataset and prepare it for the machine
 \item Etiquetas. There is room for 3 etiquetas, but it is only their presence that matters. Therefore they are passed to one-hot encoding. The i,j cell will store how many times the jth etiqueta is present in the ith sample i.e. 0 to 3 times if it appears in none or 3 slots, respectively (qualitiative)
 \end{itemize}
 
-<<preprocess_function, opts.label='main'>>=
-@
-   
-Apply the function to preprocess the training and test datasets in parallel.
-<<preprocess, opts.label='main'>>=
-@
+Once the function is defined, it was applied to preprocess the training and test datasets in parallel. See appendix B for source code.
 
-<<preprocess_etiqueta, opts.label='main'>>=
-@
-  
-<<preprocess_save, opts.label='save'>>=
-@
-
-<<preprocess_load, opts.label='load'>>=
-@
-  
   
 \subsection{\textbf{P}rincipal \textbf{C}omponent \textbf{A}nalysis (PCA)}
 
-The distribution of edad (age), raza (race), gender (sexo) and Y (label) across individuals on the 2D plane
-capturing the most variance can be visualized by means of a PCA. The PCA takes numerical features and rotates them into a new space where variance (information) is maximised on each new feature (principal component). The first two can be used to generate the mentioned 2D plane. This is shown in figure \ref{fig:pca_multicategory}
+The distribution of edad (age), raza (race), gender (sexo) and Y (label) across individuals on the 2D plane capturing the most variance can be visualized by means of a PCA. The PCA takes numerical features and rotates them into a new space where variance (information) is maximised on each new feature (principal component). The first two can be used to generate the mentioned 2D plane. This is shown in figure \ref{fig:pca_multicategory}
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.7\textwidth]{plots/PCA_multicategory}
+\includegraphics[width=\textwidth]{plots/PCA_multicategory}
 \caption{PCA plots for individuals colored by race, gender, age and label. No category seems to be distinguishable on the 2D plane in any of the features probed.}
 \label{fig:pca_multicategory}
 \end{figure}
@@ -178,23 +168,10 @@ The PCA did not successfully evidence any clear pattern.
 
 An analogous analysis can be performed using categorical variables with the MCA algorithm from the R package FactoMineR. The algorithm was run with and without etiquetas (tags) to explore if saving these ensemble of one-hot features could be spared for computational efficiency. A plot of the contribution of the explored variables to the new 2D plane is shown in figure \ref{fig:mca_variables}, whereas a plot of the individuals in this plane is shown on figure \ref{fig:mca_obs_Y}.
 
-<<MCA_functions, eval=T, echo=T, include=F>>=
-@
-<<MCA, eval=F, echo=T, include=T>>=
-@
-<<MCA_save, ops.label='save'>>=
-@
-<<MCA_load, ops.label='load'>>=
-@
-
-<<MCA_visualization, eval=F, echo=F, include=F>>=
-@
-
-
 \begin{figure}[!h]
 \centering
 \includegraphics[width=0.7\textwidth]{plots/mca_variables_combined}
-\caption{Visualization of the contribution of each categorical variable to the most informative MCA 2D plane. Nominal variables seemed to bring the most information. \textbf{A} Without etiquetas. \textbf{B} With etiquetas.}
+\caption{Visualization of the contribution of each categorical variable to the most informative MCA 2D plane. Etiquetas and nominal variables seemed to bring the most information. \textbf{A} Without etiquetas. \textbf{B} With etiquetas.}
 \label{fig:mca_variables}
 \end{figure}
 
@@ -205,18 +182,18 @@ An analogous analysis can be performed using categorical variables with the MCA 
 \label{fig:mca_obs_Y}
 \end{figure}
 
-The analysis, whose results are shown in figures the mentioned figures, is able to successfuly find a pattern whereby individuals clustering in the top left corner are highly likely to be of class 0 (Y=0). The features extracted in this analysis will be added to the processed data in order to make use of their predictive power in the model training. Remarkably, if MCA is conducted without etiquetas, many individuals are projected on the same spot of the 2D plane. This effect is canceled when etiquetas are included, indicating that indeed etiquetas contribute to each of the individuals' diversity. FOr this reason, the top 5 MCA features produced when including etiquetas will be used to power the models.
+The analysis, whose results are shown in figures the mentioned figures, is able to successfuly find a pattern whereby individuals clustering in the top left corner are highly likely to be of class 0 (Y=0). The features extracted in this analysis will be added to the processed data in order to make use of their predictive power in the model training. Remarkably, if MCA is conducted without etiquetas, many individuals are projected on the same spot of the 2D plane. This effect is canceled when etiquetas are included, indicating that indeed etiquetas contribute to each of the individuals' diversity. For this reason, the top 5 MCA features produced when including etiquetas will be used to power the models. Figure \ref{fig:mca_contrib} shows the single greatest contributions come from nominal variables, even though the whole of the etiquetas might contribute more in the end, given the sheer amount of etiquetas.
 
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.7\textwidth]{plots/etiqueta_mca_contrib}
+\caption{Top 30 variables contributing to the overall variance found by the MCA ordered by its size and coloured by type.}
+\label{fig:mca_contrib}
+\end{figure}
 \subsection{Heatmap}
 
 Finally, a heatmap (figure \ref{fig:heatmap}) is an alternative way to visualize the presence of any patterns/clustering in the processed dataset.
-
-<<heatmap, ops.label='main'>>=
-@
-<<heatmap_save, ops.label='save'>>=
-@
-<<heatmap_load, ops.label='load'>>=
-@
 
 \begin{figure}[!h]
 \centering
@@ -227,7 +204,7 @@ Finally, a heatmap (figure \ref{fig:heatmap}) is an alternative way to visualize
 
 \subsection{Improvements to the EDA}
 
-More insights could be extracted by performing supervised projections of the dataset, where new highly informative planes are found taking into account the label. Moreover, more intensive processing, like the usage of an autoencoder, could be used to perform more powerful dimensionality reduction on the categorical variables, specillay the etiquetas.
+More insights could be extracted by performing supervised projections of the dataset, where new highly informative planes are found taking into account the label. Moreover, more intensive processing, like the usage of an autoencoder, could be used to perform more powerful dimensionality reduction on the categorical variables, specially the etiquetas.
 
 \subsection{Export features}
 <<export_data,opts.label='main'>>=
@@ -242,21 +219,28 @@ More insights could be extracted by performing supervised projections of the dat
 <<session_info,opts.label='main', eval=T>>=
 @
 
-\section{Appendix}
+\newpage
+\section{Appendix A}
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.7\textwidth]{plots/etiqueta_mca_obs_race_facet}
+\includegraphics[width=0.5\textwidth]{plots/etiqueta_mca_obs_race_facet}
 \end{figure}
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.7\textwidth]{plots/etiqueta_mca_obs_Y_facet_edad_col}
+\includegraphics[width=0.5\textwidth]{plots/etiqueta_mca_obs_Y_facet_edad_col}
 \end{figure}
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.7\textwidth]{plots/etiqueta_mca_obs_Y_facet_raza_col}
+\includegraphics[width=0.5\textwidth]{plots/etiqueta_mca_obs_Y_facet_raza_col}
 \end{figure}
+
+\newpage
+
+\section{Appendix B}
+<<preprocess_function, echo=T>>=
+@
 
 \end{document}
